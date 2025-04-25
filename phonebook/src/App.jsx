@@ -1,10 +1,7 @@
 import { useState } from "react";
-
-const Person = ({ name, number }) => (
-  <p>
-    {name} {number}
-  </p>
-);
+import Filter from "./components/Filter";
+import Persons from "./components/Persons";
+import PersonForm from "./components/PersonForm";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -22,6 +19,7 @@ const App = () => {
 
     if (persons.find((person) => person.name === newName) != undefined)
       alert(`${newName} is already on the list`);
+    else if (newName === "") alert(`name is empty`)
     else {
       const newObject = {
         name: newName,
@@ -44,25 +42,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input value={filter} onChange={handleFilterChange} />
-      </div>
+      <Filter inputValue={filter} valueHandler={handleFilterChange} />
+
       <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        formOnSubmit={addPerson}
+        nameValue={newName}
+        nameValueHandler={handleNameChange}
+        numberValue={newNumber}
+        numberValueHandler={handleNumberChange}
+      />
+
       <h2>Numbers</h2>
-      {personsToShow.map((person) => (
-        <Person key={person.name} name={person.name} number={person.number} />
-      ))}
+      <Persons persons={personsToShow} />
     </div>
   );
 };
