@@ -24,6 +24,7 @@ const App = () => {
       const newObject = {
         name: newName,
         number: newNumber,
+        id: persons.length + 1
       };
 
       setPersons(persons.concat(newObject));
