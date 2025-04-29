@@ -3,8 +3,8 @@ import Filter from "./components/Filter";
 import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import personService from "./services/persons";
-import Notificaation from "./components/Notification";
-import './index.css'
+import Notification from "./components/Notification";
+import "./index.css";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -18,7 +18,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [notifMsg, setNotifMsg] = useState(null)
+  const [notifMsg, setNotifMsg] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -41,10 +42,10 @@ const App = () => {
           setPersons(
             persons.map((person) => (person.id === id ? response : person))
           );
-          setNotifMsg(`${newName} was updated successfully.`)
+          setNotifMsg(`${newName} was updated successfully.`);
           setTimeout(() => {
-            setNotifMsg(null)
-          }, 5000)
+            setNotifMsg(null);
+          }, 5000);
           setNewName("");
           setNewNumber("");
         });
@@ -56,10 +57,10 @@ const App = () => {
       };
       personService.create(newObject).then((response) => {
         setPersons(persons.concat(response));
-        setNotifMsg(`${newName} was added successfully.`)
-          setTimeout(() => {
-            setNotifMsg(null)
-          }, 5000)
+        setNotifMsg(`${newName} was added successfully.`);
+        setTimeout(() => {
+          setNotifMsg(null);
+        }, 5000);
         setNewName("");
         setNewNumber("");
       });
@@ -73,10 +74,19 @@ const App = () => {
     const id = event.target.classList[0];
     const personToDelete = persons.find((person) => person.id === id);
     if (window.confirm(`Delete ${personToDelete.name} ?`)) {
-      personService.deletePerson(id).then((response) => {
-        console.log(response);
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      personService
+        .deletePerson(id)
+        .then((response) => {
+          console.log(response)
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          console.log(error);
+          setErrorMsg(`${personToDelete.name} was already deleted`);
+          setTimeout(() => {
+            setErrorMsg(null);
+          }, 5000);
+        });
     }
   };
 
@@ -88,7 +98,8 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notificaation message={notifMsg} />
+      <Notification message={notifMsg} type="ok"/>
+      <Notification message={errorMsg}/>
 
       <Filter inputValue={filter} valueHandler={handleFilterChange} />
 
