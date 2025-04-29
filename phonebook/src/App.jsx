@@ -20,22 +20,38 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
-    if (persons.find((person) => person.name === newName) != undefined)
-      alert(`${newName} is already on the list`);
-    else if (newName === "") alert(`name is empty`);
-    else {
-      const newObject = {
-        name: newName,
-        number: newNumber,
-      };
+    if (newName === "" || newNumber === "")
+      alert("Please complete all the fields");
 
+    if (persons.find((person) => person.name === newName.trim()) != undefined) {
+      if (
+        window.confirm(
+          `${newName.trim()} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const id = persons.find((person) => person.name === newName.trim())?.id;
+        const updatedObject = {
+          name: newName.trim(),
+          number: newNumber.trim(),
+        };
+        personService.update(id, updatedObject).then((response) => {
+          setPersons(
+            persons.map((person) => (person.id === id ? response : person))
+          );
+          setNewName("");
+          setNewNumber("");
+        });
+      }
+    } else {
+      const newObject = {
+        name: newName.trim(),
+        number: newNumber.trim(),
+      };
       personService.create(newObject).then((response) => {
         setPersons(persons.concat(response));
         setNewName("");
         setNewNumber("");
       });
-
-      setNewName("");
     }
   };
 
