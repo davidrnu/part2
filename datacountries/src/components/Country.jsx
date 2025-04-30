@@ -5,8 +5,6 @@ const Country = ({ data }) => {
   const languages = data.languages;
   const flag = data.flag
 
-  console.log(data);
-
   return (
     <div>
       <h1>{name}</h1>
