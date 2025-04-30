@@ -20,6 +20,8 @@ const Countries = ({ countries, searchInput }) => {
         area: country.area,
         languages: Object.values(country.languages),
         flag: country.flags,
+        capitalLat: country.capitalInfo.latlng[0],
+        capitalLng: country.capitalInfo.latlng[1]
       }
   }
 

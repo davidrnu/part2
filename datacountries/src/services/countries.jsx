@@ -12,4 +12,6 @@ const getCountry = (country) => {
     return request.then(response => response.data)
 }
 
+
+
 export default {getCountries, getCountry}

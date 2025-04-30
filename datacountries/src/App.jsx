@@ -13,6 +13,7 @@ const App = () => {
       .then((countries) => setCountries(countries));
   }, []);
 
+
   if (!countries) {
     return null;
   }
